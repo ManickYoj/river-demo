@@ -21,7 +21,7 @@ def init(windowSize):
     clock = pygame.time.Clock()
 
     while not done:
-        dt = clock.tick(50)
+        dt = clock.tick(100) / 1000.
 
         # TODO: refactor with Input class
         for e in pygame.event.get():
@@ -30,5 +30,6 @@ def init(windowSize):
 
         GameObject.updateAll(dt)
         Camera.getActive().render(dt)
+        GameObject.lateUpdateAll(dt)
 
     pygame.quit()

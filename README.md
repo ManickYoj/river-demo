@@ -21,7 +21,7 @@ It works, but with no source or sink of water - it's more a lake simulator than 
 
 Here it is in action:
 
-![River Demo in Action](https://github.com/ManickYoj/river-demo/blob/master/docs/iteration_01.gif?raw=true)
+![River Demo in Action](https://github.com/ManickYoj/river-demo/blob/master/docs/iteration_02.gif?raw=true)
 
 ## Possible Future Work
 - Engine: The simulation sits on a cute, underpowered, undocumented pygame-based engine which I may extend for future simulations or small 2D games.

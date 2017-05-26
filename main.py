@@ -5,11 +5,12 @@ import random as r
 
 WINDOW_SIZE = (1000, 600)
 DEFAULT_VOLUME = 5
-RIVER_NODES = 40
-DX_PER_NODE = 2
-DY_PER_NODE = -.5
+RIVER_NODES = 80
+DX_PER_NODE = 1
+DY_PER_NODE = -.75
 Y_NOISE = 2
-DAMPING = 0.6
+DAMPING = 0.0
+GRAVITY = 30
 
 
 class RiverNode (object):
@@ -36,10 +37,10 @@ class RiverNode (object):
         return self.position.absY() + self.volume
 
     # Update methods
-    def calculateFlows(self):
+    def calculateFlows(self, dt):
         for n in self.neighbors:
             deltaHeight = self.waterHeight() - n["ref"].waterHeight()
-            n["flowTo"] = deltaHeight * (1 - DAMPING) \
+            n["flowTo"] = GRAVITY * dt * deltaHeight * (1 - DAMPING) \
                 if deltaHeight > 0 else 0.0
 
         # Check that outflow does not exceed capacity
@@ -117,7 +118,7 @@ class River(e.GameObject):
 
     def update(self, dt):
         for n in self.nodes:
-            n.calculateFlows()
+            n.calculateFlows(dt)
 
         for n in self.nodes:
             n.updateVolume()

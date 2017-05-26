@@ -10,8 +10,13 @@ class GameObject(object):
 
     @staticmethod
     def updateAll(dt):
-        for k, v in GameObject._registry.items():
-            v.update(dt)
+        for obj in GameObject._registry.values():
+            obj.update(dt)
+
+    @staticmethod
+    def lateUpdateAll(dt):
+        for obj in GameObject._registry.values():
+            obj.update(dt)
 
     def __init__(self):
         self.id = GameObject.getId()
@@ -21,4 +26,7 @@ class GameObject(object):
         del GameObject._registry[self.id]
 
     def update(self, dt):
+        pass
+
+    def lateUpdate(self, dt):
         pass
