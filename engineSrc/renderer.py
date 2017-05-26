@@ -1,16 +1,10 @@
 import pygame
+from camera import Camera
 
 
 class Renderer(object):
     _registry = {}
     _id = 0
-    _screen = None
-    _bgColor = None
-
-    @staticmethod
-    def setScreen(size, bgColor=(255, 255, 255)):
-        Renderer._screen = pygame.display.set_mode(size)
-        Renderer._bgColor = bgColor
 
     @staticmethod
     def getId():
@@ -19,17 +13,16 @@ class Renderer(object):
         return newId
 
     @staticmethod
-    def renderAll(dt):
-        Renderer._screen.fill(Renderer._bgColor)
-
-        for k, v in Renderer._registry.items():
-            v.render(dt)
-
-        pygame.display.flip()
+    def getRenderables():
+        return [v for _, v in Renderer._registry.items()]
 
     @staticmethod
     def getScreen():
-        return Renderer._screen
+        return Camera.getScreen()
+
+    @staticmethod
+    def coordToPx(position):
+        return Camera.getActive().coordToPx(position)
 
     def __init__(self):
         self.id = Renderer.getId()
@@ -63,9 +56,12 @@ class PolyRenderer(Renderer):
         if self.verts is None:
             return
 
+        # Convert to screen coordinates for rendering
+        pxVerts = [Renderer.coordToPx(p) for p in self.verts]
+
         pygame.draw.polygon(
             Renderer.getScreen(),
             self.color,
-            self.verts,
+            pxVerts,
             self.width,
         )

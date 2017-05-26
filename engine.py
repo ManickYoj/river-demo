@@ -7,17 +7,21 @@ import pygame
 from engineSrc.gameobject import *
 from engineSrc.position import *
 from engineSrc.renderer import *
+from engineSrc.camera import *
 
 
 def init(windowSize):
+    if not Camera.getActive():
+        raise Warning("No camera created. Is this intentional?")
+
     pygame.init()
-    Renderer.setScreen(windowSize)
+    Camera.setScreen(windowSize)
 
     done = False
     clock = pygame.time.Clock()
 
     while not done:
-        dt = clock.tick(30)
+        dt = clock.tick(50)
 
         # TODO: refactor with Input class
         for e in pygame.event.get():
@@ -25,6 +29,6 @@ def init(windowSize):
                 done = True
 
         GameObject.updateAll(dt)
-        Renderer.renderAll(dt)
+        Camera.getActive().render(dt)
 
     pygame.quit()

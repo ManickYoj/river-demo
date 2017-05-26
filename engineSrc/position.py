@@ -1,3 +1,7 @@
+# TODO: Add arithmetic operations
+# TODO: Add string/print operations
+
+
 class PositionBase(object):
     def __init__(self, x=0, y=0):
         self._x = x
@@ -20,3 +24,6 @@ class Position(PositionBase):
 
     def absY(self):
         return self._y + self.parent.y()
+
+    def asTuple(self):
+        return (self.absX(), self.absY())

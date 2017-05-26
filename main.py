@@ -1,9 +1,14 @@
+# TODO: Water momentum
+
 import engine as e
 import random as r
 
-WINDOW_SIZE = (1000, 400)
-DEFAULT_VOLUME = 15
+WINDOW_SIZE = (1000, 600)
+DEFAULT_VOLUME = 5
 RIVER_NODES = 40
+DX_PER_NODE = 2
+DY_PER_NODE = -.5
+Y_NOISE = 2
 DAMPING = 0.6
 
 
@@ -34,7 +39,8 @@ class RiverNode (object):
     def calculateFlows(self):
         for n in self.neighbors:
             deltaHeight = self.waterHeight() - n["ref"].waterHeight()
-            n["flowTo"] = deltaHeight * (1 - DAMPING) if deltaHeight > 0 else 0.0
+            n["flowTo"] = deltaHeight * (1 - DAMPING) \
+                if deltaHeight > 0 else 0.0
 
         # Check that outflow does not exceed capacity
         # If it does, scale down outflows to match volume
@@ -68,11 +74,16 @@ class RiverNode (object):
 
 class River(e.GameObject):
     def __init__(self):
-        self.position = e.Position(0, 0)
+        # Center horizontally and vertically on camera
+        self.position = e.Position(
+            -RIVER_NODES * DX_PER_NODE / 2,
+            -RIVER_NODES * DY_PER_NODE / 2
+        )
 
         self.nodes = [
             RiverNode(e.Position(
-                i * 20, 100 + 4 * i + r.randint(0, 10),
+                i * DX_PER_NODE,
+                i * DY_PER_NODE + r.random() * Y_NOISE,
                 self.position
             )) for i in range(RIVER_NODES)
         ]
@@ -91,13 +102,13 @@ class River(e.GameObject):
     def getVerts(self):
         vertList = []
         for n in self.nodes:
-            vertList.append((
+            vertList.append(e.Position(
                 n.position.absX(),
                 n.position.absY(),
             ))
 
         for n in self.nodes[::-1]:
-            vertList.append((
+            vertList.append(e.Position(
                 n.position.absX(),
                 n.waterHeight(),
             ))
@@ -115,5 +126,6 @@ class River(e.GameObject):
 
 
 if __name__ == "__main__":
+    c = e.Camera()
     River()
     e.init(WINDOW_SIZE)
